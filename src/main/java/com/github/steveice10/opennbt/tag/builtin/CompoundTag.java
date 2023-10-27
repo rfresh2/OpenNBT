@@ -9,8 +9,11 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.EOFException;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * A compound tag containing other tags.
@@ -24,6 +27,7 @@ public class CompoundTag extends Tag implements Iterable<Tag> {
      * @param name The name of the tag.
      */
     public CompoundTag(String name) {
+        // todo: we could use fastutil maps here
         this(name, Maps.newHashMap());
     }
 
@@ -145,19 +149,16 @@ public class CompoundTag extends Tag implements Iterable<Tag> {
 
     @Override
     public void read(DataInput in) throws IOException {
-        List<Tag> tags = new ArrayList<Tag>();
         try {
             Tag tag;
-            while((tag = NBTIO.readTag(in)) != null) {
-                tags.add(tag);
+            while ((tag = NBTIO.readTag(in)) != null) {
+                this.put(tag);
             }
-        } catch(EOFException e) {
+        } catch (EOFException e) {
             throw new IOException("Closing EndTag was not found!");
         }
-
-        for(Tag tag : tags) {
-            this.put(tag);
-        }
+        // todo: the original code doesn't write the entire tag to the map if there is no closing tag
+        //  this version is optimistic and assumes that the entire tag will be read and writes it all the map incrementally
     }
 
     @Override
