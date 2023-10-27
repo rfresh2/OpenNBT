@@ -1,21 +1,16 @@
 package com.github.steveice10.opennbt.tag.builtin;
 
+import com.github.steveice10.opennbt.NBTIO;
+import com.github.steveice10.opennbt.SNBTIO.StringifiedNBTReader;
+import com.github.steveice10.opennbt.SNBTIO.StringifiedNBTWriter;
+import com.google.common.collect.Maps;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.EOFException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
-
-import com.github.steveice10.opennbt.NBTIO;
-import com.github.steveice10.opennbt.SNBTIO.StringifiedNBTReader;
-import com.github.steveice10.opennbt.SNBTIO.StringifiedNBTWriter;
 
 /**
  * A compound tag containing other tags.
@@ -29,7 +24,7 @@ public class CompoundTag extends Tag implements Iterable<Tag> {
      * @param name The name of the tag.
      */
     public CompoundTag(String name) {
-        this(name, new LinkedHashMap<String, Tag>());
+        this(name, Maps.newHashMap());
     }
 
     /**
@@ -40,12 +35,12 @@ public class CompoundTag extends Tag implements Iterable<Tag> {
      */
     public CompoundTag(String name, Map<String, Tag> value) {
         super(name);
-        this.value = new LinkedHashMap<String, Tag>(value);
+        this.value = value;
     }
 
     @Override
     public Map<String, Tag> getValue() {
-        return new LinkedHashMap<String, Tag>(this.value);
+        return this.value;
     }
 
     /**
@@ -54,7 +49,7 @@ public class CompoundTag extends Tag implements Iterable<Tag> {
      * @param value New value of this tag.
      */
     public void setValue(Map<String, Tag> value) {
-        this.value = new LinkedHashMap<String, Tag>(value);
+        this.value = value;
     }
 
     /**
@@ -173,7 +168,7 @@ public class CompoundTag extends Tag implements Iterable<Tag> {
 
         out.writeByte(0);
     }
-    
+
     @Override
     public void destringify(StringifiedNBTReader in) throws IOException {
         in.readSkipWhitespace();
@@ -195,11 +190,11 @@ public class CompoundTag extends Tag implements Iterable<Tag> {
                 break;
         }
     }
-    
+
     @Override
     public void stringify(StringifiedNBTWriter out, boolean linebreak, int depth) throws IOException {
         out.append('{');
-        
+
         boolean first = true;
         for(Tag t: value.values()) {
             if(first) {
@@ -212,7 +207,7 @@ public class CompoundTag extends Tag implements Iterable<Tag> {
             }
             out.writeTag(t, linebreak, depth + 1);
         }
-        
+
         if(linebreak) {
             out.append('\n');
             out.indent(depth);
@@ -222,7 +217,7 @@ public class CompoundTag extends Tag implements Iterable<Tag> {
 
     @Override
     public CompoundTag clone() {
-        Map<String, Tag> newMap = new LinkedHashMap<String, Tag>();
+        Map<String, Tag> newMap = Maps.newHashMap();
         for(Entry<String, Tag> entry : this.value.entrySet()) {
             newMap.put(entry.getKey(), entry.getValue().clone());
         }
