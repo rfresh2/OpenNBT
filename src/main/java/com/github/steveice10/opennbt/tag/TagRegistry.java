@@ -1,32 +1,21 @@
 package com.github.steveice10.opennbt.tag;
 
-import com.github.steveice10.opennbt.tag.builtin.ByteArrayTag;
-import com.github.steveice10.opennbt.tag.builtin.ByteTag;
-import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
-import com.github.steveice10.opennbt.tag.builtin.DoubleTag;
-import com.github.steveice10.opennbt.tag.builtin.FloatTag;
-import com.github.steveice10.opennbt.tag.builtin.IntArrayTag;
-import com.github.steveice10.opennbt.tag.builtin.IntTag;
-import com.github.steveice10.opennbt.tag.builtin.ListTag;
-import com.github.steveice10.opennbt.tag.builtin.LongTag;
-import com.github.steveice10.opennbt.tag.builtin.ShortTag;
-import com.github.steveice10.opennbt.tag.builtin.StringTag;
-import com.github.steveice10.opennbt.tag.builtin.Tag;
+import com.github.steveice10.opennbt.tag.builtin.*;
 import com.github.steveice10.opennbt.tag.builtin.custom.DoubleArrayTag;
 import com.github.steveice10.opennbt.tag.builtin.custom.FloatArrayTag;
-import com.github.steveice10.opennbt.tag.builtin.LongArrayTag;
 import com.github.steveice10.opennbt.tag.builtin.custom.ShortArrayTag;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 import java.lang.reflect.Constructor;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.IdentityHashMap;
 
 /**
  * A registry containing different tag classes.
  */
 public class TagRegistry {
-    private static final Map<Integer, Class<? extends Tag>> idToTag = new HashMap<Integer, Class<? extends Tag>>();
-    private static final Map<Class<? extends Tag>, Integer> tagToId = new HashMap<Class<? extends Tag>, Integer>();
+    // todo: avoid reflection here by making a TagDefinition class that contains the class and a factory via constructor method
+    private static final Int2ObjectOpenHashMap<Class<? extends Tag>> idToTag = new Int2ObjectOpenHashMap<>();
+    private static final IdentityHashMap<Class<? extends Tag>, Integer> tagToId = new IdentityHashMap<>();
 
     static {
         register(1, ByteTag.class);
@@ -115,7 +104,7 @@ public class TagRegistry {
      */
     public static Tag createInstance(int id, String tagName) throws TagCreateException {
         Class<? extends Tag> clazz = idToTag.get(id);
-        if(clazz == null) {
+        if(clazz == null || clazz == idToTag.defaultReturnValue()) {
             throw new TagCreateException("Could not find tag with ID \"" + id + "\".");
         }
 
