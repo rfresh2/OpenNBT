@@ -1,6 +1,9 @@
 package com.github.steveice10.opennbt.mini;
 
+import com.google.common.base.Objects;
+
 import java.io.*;
+import java.util.Arrays;
 
 public class MNBT {
     private byte[] data;
@@ -42,4 +45,16 @@ public class MNBT {
         return empty;
     }
 
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final MNBT mnbt = (MNBT) o;
+        return isEmpty() == mnbt.isEmpty() && Arrays.equals(getData(), mnbt.getData());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getData(), isEmpty());
+    }
 }
