@@ -13,7 +13,11 @@ import java.io.*;
 public class MNBTIO {
 
     public static MNBT read(DataInputStream in) throws IOException {
-        return new MNBT(in);
+        return new MNBT(in, false);
+    }
+
+    public static MNBT readAny(DataInputStream in) throws IOException {
+        return new MNBT(in, true);
     }
 
     public static void write(DataOutput out, MNBT nbt) throws IOException {
@@ -37,4 +41,14 @@ public class MNBTIO {
         }
         return new MNBT(byteOut.toByteArray());
     }
+
+    public static MNBT writeAny(Tag tag) throws IOException {
+        if (tag == null) return null;
+        ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+        try (DataOutputStream out = new DataOutputStream(byteOut)) {
+            NBTIO.writeAnyTag((DataOutput) out, tag);
+        }
+        return new MNBT(byteOut.toByteArray());
+    }
+
 }

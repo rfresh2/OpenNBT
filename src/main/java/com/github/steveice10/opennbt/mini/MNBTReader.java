@@ -101,6 +101,15 @@ public class MNBTReader {
         return true;
     }
 
+    public static boolean readAnyTag(final DataInputStream in, final DataOutputStream out) throws IOException {
+        final int id = in.readUnsignedByte();
+        out.writeByte(id);
+        if (id == 0) return false;
+        // any = no tag name ?
+        tagIdToHandler.get(id).accept(in, out);
+        return true;
+    }
+
     public static void readCompoundTag(final DataInputStream in, final DataOutputStream out) throws IOException {
         while (readTag(in, out)) { }
     }

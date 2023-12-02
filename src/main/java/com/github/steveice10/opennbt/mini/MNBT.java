@@ -18,14 +18,14 @@ public class MNBT {
         this.empty = data.length == 0;
     }
 
-    public MNBT(DataInputStream in) throws IOException {
-        this.read(in);
+    public MNBT(DataInputStream in, boolean any) throws IOException {
+        this.read(in, any);
     }
 
-    public void read(DataInputStream in) throws IOException {
+    public void read(DataInputStream in, final boolean any) throws IOException {
         ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
         try (DataOutputStream out = new DataOutputStream(byteOutStream)) {
-            boolean b = MNBTReader.readTag(in, out);
+            boolean b = any ? MNBTReader.readAnyTag(in, out) : MNBTReader.readTag(in, out);
             // todo: should be possible to avoid copying the array here
             //  will need to provide our own impl of the byte array output stream
             this.data = byteOutStream.toByteArray();
