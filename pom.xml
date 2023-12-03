@@ -14,6 +14,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>17</jdk.version>
+        <fastutil.version>8.5.13-SNAPSHOT</fastutil.version>
         <argLine></argLine>
     </properties>
 
@@ -54,14 +55,20 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.30</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>32.1.3-jre</version>
         </dependency>
         <dependency>
-            <groupId>com.nukkitx.fastutil</groupId>
-            <artifactId>fastutil-int-object-maps</artifactId>
-            <version>8.5.3</version>
+            <groupId>org.cloudburstmc.fastutil.maps</groupId>
+            <artifactId>int-object-maps</artifactId>
+            <version>${fastutil.version}</version>
         </dependency>
     </dependencies>
 

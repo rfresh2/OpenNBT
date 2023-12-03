@@ -1,10 +1,12 @@
 package com.github.steveice10.opennbt.mini;
 
-import com.google.common.base.Objects;
+import lombok.Data;
+import lombok.ToString;
 
 import java.io.*;
-import java.util.Arrays;
 
+@Data
+@ToString(exclude = "data")
 public class MNBT {
     private byte[] data;
     private boolean empty = true;
@@ -35,26 +37,5 @@ public class MNBT {
 
     public void write(DataOutput out) throws IOException {
         out.write(this.data);
-    }
-
-    public byte[] getData() {
-        return this.data;
-    }
-
-    public boolean isEmpty() {
-        return empty;
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final MNBT mnbt = (MNBT) o;
-        return isEmpty() == mnbt.isEmpty() && Arrays.equals(getData(), mnbt.getData());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getData(), isEmpty());
     }
 }
