@@ -3,6 +3,10 @@
   "extends": [
     "config:base"
   ],
+  "baseBranches": [
+    "1.5",
+    "1.6"
+  ],
   "packageRules": [
     {
       "matchPackagePatterns": ["*"],
