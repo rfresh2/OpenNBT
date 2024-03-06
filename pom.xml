@@ -3,27 +3,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.viaversion</groupId>
-    <artifactId>nbt</artifactId>
-    <version>4.3.0</version>
+    <groupId>com.github.rfresh2</groupId>
+    <artifactId>OpenNBT</artifactId>
+    <version>2.0</version>
     <packaging>jar</packaging>
 
-    <name>ViaNBT</name>
+    <name>OpenNBT</name>
     <description>A library for reading and writing NBT files, written in Java.</description>
-    <url>https://github.com/ViaVersion/ViaNBT</url>
-
-    <distributionManagement>
-        <repository>
-            <id>viaversion</id>
-            <url>https://repo.viaversion.com</url>
-        </repository>
-    </distributionManagement>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jdk.version>1.8</jdk.version>
-        <maven.compiler.target>${jdk.version}</maven.compiler.target>
-        <maven.compiler.source>${jdk.version}</maven.compiler.source>
+        <jdk.version>17</jdk.version>
+        <fastutil.version>8.5.13-SNAPSHOT</fastutil.version>
     </properties>
 
     <licenses>
@@ -34,30 +25,59 @@
         </license>
     </licenses>
 
-    <developers>
-        <developer>
-            <id>steveice10</id>
-            <name>Steveice10</name>
-            <email>Steveice10@gmail.com</email>
-        </developer>
-        <developer>
-            <id>kennytv</id>
-            <name>Nassim Jahnke</name>
-        </developer>
-    </developers>
-
-    <issueManagement>
-        <system>GitHub</system>
-        <url>https://github.com/ViaVersion/OpenNBT/issues</url>
-    </issueManagement>
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+        <repository>
+            <id>opencollab-release-repo</id>
+            <url>https://repo.opencollab.dev/maven-releases/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>opencollab-snapshot-repo</id>
+            <url>https://repo.opencollab.dev/maven-snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
     <dependencies>
-        <!-- Expected to be bundled -->
         <dependency>
-            <groupId>it.unimi.dsi</groupId>
-            <artifactId>fastutil</artifactId>
-            <version>8.5.2</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.30</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>33.0.0-jre</version>
+        </dependency>
+        <dependency>
+            <groupId>org.cloudburstmc.fastutil.maps</groupId>
+            <artifactId>int-object-maps</artifactId>
+            <version>${fastutil.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.cloudburstmc.fastutil.maps</groupId>
+            <artifactId>object-int-maps</artifactId>
+            <version>${fastutil.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.cloudburstmc.fastutil</groupId>
+            <artifactId>io</artifactId>
+            <version>${fastutil.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
@@ -72,26 +92,46 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.6.0</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>aggregate</goal>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <artifactId>maven-wrapper-plugin</artifactId>
+                <version>3.2.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.3.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.12.1</version>
                 <configuration>
-                    <show>public</show>
-                    <failOnError>false</failOnError>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.3</version>
+                <configuration>
+                    <!-- Force the right file encoding during unit testing -->
+                    <argLine>-Dfile.encoding=${project.build.sourceEncoding} @{argLine}</argLine>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>3.3.0</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -100,6 +140,16 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>3.1.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.1.1</version>
             </plugin>
         </plugins>
     </build>

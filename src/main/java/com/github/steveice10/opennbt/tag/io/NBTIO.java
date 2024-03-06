@@ -3,10 +3,11 @@ package com.github.steveice10.opennbt.tag.io;
 import com.github.steveice10.opennbt.tag.TagRegistry;
 import com.github.steveice10.opennbt.tag.builtin.Tag;
 import com.github.steveice10.opennbt.tag.limiter.TagLimiter;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Utility to read and write NBT tags.
@@ -81,6 +82,19 @@ public final class NBTIO {
         if (named) {
             out.writeUTF(""); // Empty name
         }
+        tag.write(out);
+    }
+
+    /**
+     * Writes a named NBT tag to a data output.
+     *
+     * @param out output stream to write to
+     * @param tag tag to write
+     * @throws IOException if an I/O error occurs
+     */
+    public static void writeTag(final DataOutput out, final Tag tag, final String name) throws IOException {
+        out.writeByte(tag.getTagId());
+        out.writeUTF(name);
         tag.write(out);
     }
 }
