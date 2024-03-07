@@ -26,7 +26,7 @@ public class MNBTIO {
 
     public static Tag read(MNBT mnbt) throws IOException {
         try (DataInputStream in = new DataInputStream(new ByteArrayInputStream(mnbt.getData()))) {
-            return NBTIO.readTag(in, TagLimiter.noop(), true, null);
+            return NBTIO.readTag(in, TagLimiter.noop(), mnbt.isNamed(), null);
         }
     }
 

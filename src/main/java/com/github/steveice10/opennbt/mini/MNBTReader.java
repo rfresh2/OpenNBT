@@ -8,7 +8,7 @@ import java.io.IOException;
 
 /**
  * Simple reader for MNBT that writes the same input to an output stream
- * The reason we need this whole thing is to find where the NBT and capture the data
+ * The reason we need this whole thing is to find where the NBT ends and capture the data stream
  */
 public class MNBTReader {
     private static final Int2ObjectOpenHashMap<DataConsumer> tagIdToHandler = new Int2ObjectOpenHashMap<>();
