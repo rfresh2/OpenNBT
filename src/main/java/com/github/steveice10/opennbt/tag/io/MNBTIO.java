@@ -14,36 +14,46 @@ import java.io.*;
  */
 public class MNBTIO {
 
-    public static MNBT read(DataInputStream in, boolean named) throws IOException {
+    public static MNBT read(DataInputStream in, boolean named) throws UncheckedIOException {
         ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
         try (DataOutputStream out = new DataOutputStream(byteOutStream)) {
             boolean b = named ? MNBTReader.readTag(in, out) : MNBTReader.readNameless(in, out);
             var data = byteOutStream.toByteArray();
             var empty = !b;
             return new MNBT(data, empty, named);
+        } catch (final IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 
-    public static Tag read(MNBT mnbt) throws IOException {
+    public static Tag read(MNBT mnbt) throws UncheckedIOException {
         try (DataInputStream in = new DataInputStream(new ByteArrayInputStream(mnbt.getData()))) {
             return NBTIO.readTag(in, TagLimiter.noop(), mnbt.isNamed(), null);
+        } catch (final IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 
-    public static void write(DataOutput out, MNBT nbt) throws IOException {
-        if (nbt != null) {
-            out.write(nbt.getData());
-        } else {
-            out.writeByte(0);
+    public static void write(DataOutput out, MNBT nbt) throws UncheckedIOException {
+        try {
+            if (nbt != null) {
+                out.write(nbt.getData());
+            } else {
+                out.writeByte(0);
+            }
+        } catch (final IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 
     // this is NOT efficient, try not to use this in performance critical areas
-    public static MNBT write(Tag tag, boolean named) throws IOException {
+    public static MNBT write(Tag tag, boolean named) throws UncheckedIOException {
         if (tag == null) return null;
         ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
         try (DataOutputStream out = new DataOutputStream(byteOut)) {
             NBTIO.writeTag(out, tag, named);
+        } catch (final IOException e) {
+            throw new UncheckedIOException(e);
         }
         return new MNBT(byteOut.toByteArray(), named);
     }
