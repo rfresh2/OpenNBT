@@ -14,7 +14,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>17</jdk.version>
-        <fastutil.version>8.5.13-SNAPSHOT</fastutil.version>
+        <fastutil.version>b3ff25af48</fastutil.version>
     </properties>
 
     <licenses>
@@ -29,26 +29,6 @@
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
-        </repository>
-        <repository>
-            <id>opencollab-release-repo</id>
-            <url>https://repo.opencollab.dev/maven-releases/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>opencollab-snapshot-repo</id>
-            <url>https://repo.opencollab.dev/maven-snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
         </repository>
     </repositories>
 
@@ -65,17 +45,17 @@
             <version>33.2.0-jre</version>
         </dependency>
         <dependency>
-            <groupId>org.cloudburstmc.fastutil.maps</groupId>
+            <groupId>com.github.rfresh2.fastutil</groupId>
             <artifactId>int-object-maps</artifactId>
             <version>${fastutil.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.cloudburstmc.fastutil.maps</groupId>
+            <groupId>com.github.rfresh2.fastutil</groupId>
             <artifactId>object-int-maps</artifactId>
             <version>${fastutil.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.cloudburstmc.fastutil</groupId>
+            <groupId>com.github.rfresh2.fastutil</groupId>
             <artifactId>io</artifactId>
             <version>${fastutil.version}</version>
         </dependency>
