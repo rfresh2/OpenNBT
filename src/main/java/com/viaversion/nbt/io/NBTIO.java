@@ -1,7 +1,9 @@
 package com.viaversion.nbt.io;
 
-import com.viaversion.nbt.tag.Tag;
 import com.viaversion.nbt.limiter.TagLimiter;
+import com.viaversion.nbt.tag.Tag;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;

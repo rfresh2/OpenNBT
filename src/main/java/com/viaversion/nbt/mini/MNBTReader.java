@@ -1,4 +1,4 @@
-package com.github.steveice10.opennbt.mini;
+package com.viaversion.nbt.mini;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 

@@ -1,9 +1,9 @@
-package com.github.steveice10.opennbt.tag.io;
+package com.viaversion.nbt.io;
 
-import com.github.steveice10.opennbt.mini.MNBT;
-import com.github.steveice10.opennbt.mini.MNBTReader;
-import com.github.steveice10.opennbt.tag.builtin.Tag;
-import com.github.steveice10.opennbt.tag.limiter.TagLimiter;
+import com.viaversion.nbt.limiter.TagLimiter;
+import com.viaversion.nbt.mini.MNBT;
+import com.viaversion.nbt.mini.MNBTReader;
+import com.viaversion.nbt.tag.Tag;
 
 import java.io.*;
 
