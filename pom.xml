@@ -14,7 +14,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>17</jdk.version>
-        <fastutil.version>b3ff25af48</fastutil.version>
+        <fastutil.version>edaf36bfd3</fastutil.version>
     </properties>
 
     <licenses>
