@@ -4,7 +4,7 @@
     "config:base"
   ],
   "baseBranches": [
-    "2.0"
+    "3.0"
   ],
   "packageRules": [
     {
