@@ -1,15 +1,27 @@
 package com.viaversion.nbt.mini;
 
 import lombok.SneakyThrows;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 
 public class MNBTWriter implements AutoCloseable {
 
-    private final ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
-    private final DataOutputStream out = new DataOutputStream(byteOutStream);
+    private final @Nullable ByteArrayOutputStream byteOutStream;
+    private final @NotNull DataOutputStream out;
     private boolean named = false;
+
+    public MNBTWriter() {
+        this.byteOutStream = new ByteArrayOutputStream();
+        this.out = new DataOutputStream(byteOutStream);
+    }
+
+    public MNBTWriter(@NotNull DataOutputStream out) {
+        this.byteOutStream = null;
+        this.out = out;
+    }
 
     @SneakyThrows
     public void writeEndTag() {
@@ -195,10 +207,16 @@ public class MNBTWriter implements AutoCloseable {
     }
 
     public byte[] toByteArray() {
+        if (byteOutStream == null) {
+            throw new RuntimeException("Cannot access MNBTWriter byte array directly as a custom output was provided");
+        }
         return byteOutStream.toByteArray();
     }
 
     public MNBT toMNBT() {
+        if (byteOutStream == null) {
+            throw new RuntimeException("Cannot access MNBTWriter byte array directly as a custom output was provided");
+        }
         return new MNBT(byteOutStream.toByteArray(), named);
     }
 }
