@@ -7,8 +7,8 @@ import java.io.DataOutputStream;
 
 public class MNBTWriter implements AutoCloseable {
 
-    private ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
-    private DataOutputStream out = new DataOutputStream(byteOutStream);
+    private final ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
+    private final DataOutputStream out = new DataOutputStream(byteOutStream);
     private boolean named = false;
 
     @SneakyThrows
@@ -192,6 +192,10 @@ public class MNBTWriter implements AutoCloseable {
     @Override
     public void close() throws Exception {
         out.close();
+    }
+
+    public byte[] toByteArray() {
+        return byteOutStream.toByteArray();
     }
 
     public MNBT toMNBT() {
