@@ -1,0 +1,40 @@
+name: OpenNBT 3.0 Publish
+
+on:
+  push:
+    branches:
+      - "3.0"
+
+jobs:
+  publish:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Set Maven Authentication
+        uses: s4u/maven-settings-action@v3.0.0
+        with:
+          servers: |
+            [{
+              "id": "maven.2b2t.vc", 
+              "username": "${{ secrets.MAVEN_USERNAME }}", 
+              "password": "${{ secrets.MAVEN_PASSWORD }}" 
+            }]
+
+      - name: Elevate wrapper permissions
+        run: chmod +x ./mvnw
+
+      - name: Set Version
+        run: ./mvnw versions:set -DnewVersion="3.0.${{ github.run_number }}"
+
+      - name: Publish
+        run: ./mvnw deploy
