@@ -14,7 +14,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>17</jdk.version>
-        <fastutil.version>edaf36bfd3</fastutil.version>
+        <fastutil.version>8.5.14</fastutil.version>
     </properties>
 
     <licenses>
@@ -27,8 +27,8 @@
 
     <repositories>
         <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
+            <id>2b2t.vc</id>
+            <url>https://maven.2b2t.vc/releases</url>
         </repository>
     </repositories>
 
@@ -45,12 +45,12 @@
             <version>33.2.1-jre</version>
         </dependency>
         <dependency>
-            <groupId>com.github.rfresh2.fastutil</groupId>
+            <groupId>com.github.rfresh2.fastutil.maps</groupId>
             <artifactId>int-object-maps</artifactId>
             <version>${fastutil.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.rfresh2.fastutil</groupId>
+            <groupId>com.github.rfresh2.fastutil.maps</groupId>
             <artifactId>object-int-maps</artifactId>
             <version>${fastutil.version}</version>
         </dependency>
