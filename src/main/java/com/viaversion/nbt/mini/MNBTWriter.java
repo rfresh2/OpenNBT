@@ -1,5 +1,7 @@
 package com.viaversion.nbt.mini;
 
+import com.viaversion.nbt.io.NBTIO;
+import com.viaversion.nbt.tag.Tag;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -199,6 +201,16 @@ public class MNBTWriter implements AutoCloseable {
         for (int i = 0; i < l.length; i++) {
             out.writeLong(l[i]);
         }
+    }
+
+    @SneakyThrows
+    public void writeTag(final Tag tag) {
+        NBTIO.writeTag(out, tag, false);
+    }
+
+    @SneakyThrows
+    public void writeTag(final String name, final Tag tag) {
+        NBTIO.writeTag(out, tag, name);
     }
 
     @Override
