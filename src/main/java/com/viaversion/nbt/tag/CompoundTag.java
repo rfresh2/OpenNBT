@@ -308,10 +308,157 @@ public final class CompoundTag implements Tag, Iterable<Entry<String, Tag>> {
 
     public boolean getBoolean(String tagName, boolean def) {
         final Tag tag = this.value.get(tagName);
-        if (tag instanceof NumberTag) {
-            return ((NumberTag) tag).asBoolean();
-        }
-        return def;
+        return tag instanceof NumberTag ? ((NumberTag) tag).asBoolean() : def;
+    }
+
+    /**
+     * Returns the value of the int tag if the tag exists and is an IntTag, or {@code 0}.
+     * Unlike {@link #getInt(String)}, this does not get the int value from other number tags.
+     *
+     * @param tagName tag name
+     * @return int if present, or {@code 0}
+     * @see #getInt(String)
+     */
+    public int getIntStrict(String tagName) {
+        return this.getIntStrict(tagName, 0);
+    }
+
+    /**
+     * Returns the value of the int tag if the tag exists and is an IntTag, or {@code def}.
+     * Unlike {@link #getInt(String, int)}, this does not get the int value from other number tags.
+     *
+     * @param tagName tag name
+     * @return int if present, or {@code def}
+     * @see #getInt(String, int)
+     */
+    public int getIntStrict(String tagName, int def) {
+        final Tag tag = this.value.get(tagName);
+        return tag instanceof IntTag ? ((IntTag) tag).asInt() : def;
+    }
+
+    /**
+     * Returns the value of the long tag if the tag exists and is a LongTag, or {@code 0L}.
+     * Unlike {@link #getLong(String)}, this does not get the long value from other number tags.
+     *
+     * @param tagName tag name
+     * @return long if present, or {@code 0L}
+     * @see #getLong(String)
+     */
+    public long getLongStrict(String tagName) {
+        return this.getLongStrict(tagName, 0L);
+    }
+
+    /**
+     * Returns the value of the long tag if the tag exists and is a LongTag, or {@code def}.
+     * Unlike {@link #getLong(String, long)}, this does not get the long value from other number tags.
+     *
+     * @param tagName tag name
+     * @return long if present, or {@code def}
+     * @see #getLong(String, long)
+     */
+    public long getLongStrict(String tagName, long def) {
+        final Tag tag = this.value.get(tagName);
+        return tag instanceof LongTag ? ((LongTag) tag).asLong() : def;
+    }
+
+    /**
+     * Returns the value of the short tag if the tag exists and is a ShortTag, or {@code 0}.
+     * Unlike {@link #getShort(String)}, this does not get the short value from other number tags.
+     *
+     * @param tagName tag name
+     * @return short if present, or {@code 0}
+     * @see #getShort(String)
+     */
+    public short getShortStrict(String tagName) {
+        return this.getShortStrict(tagName, (short) 0);
+    }
+
+    /**
+     * Returns the value of the short tag if the tag exists and is a ShortTag, or {@code def}.
+     * Unlike {@link #getShort(String, short)}, this does not get the short value from other number tags.
+     *
+     * @param tagName tag name
+     * @return short if present, or {@code def}
+     * @see #getShort(String, short)
+     */
+    public short getShortStrict(String tagName, short def) {
+        final Tag tag = this.value.get(tagName);
+        return tag instanceof ShortTag ? ((ShortTag) tag).asShort() : def;
+    }
+
+    /**
+     * Returns the value of the byte tag if the tag exists and is a ByteTag, or {@code 0}.
+     * Unlike {@link #getByte(String)}, this does not get the byte value from other number tags.
+     *
+     * @param tagName tag name
+     * @return byte if present, or {@code 0}
+     * @see #getByte(String)
+     */
+    public byte getByteStrict(String tagName) {
+        return this.getByteStrict(tagName, (byte) 0);
+    }
+
+    /**
+     * Returns the value of the byte tag if the tag exists and is a ByteTag, or {@code def}.
+     * Unlike {@link #getByte(String, byte)}, this does not get the byte value from other number tags.
+     *
+     * @param tagName tag name
+     * @return byte if present, or {@code def}
+     * @see #getByte(String, byte)
+     */
+    public byte getByteStrict(String tagName, byte def) {
+        final Tag tag = this.value.get(tagName);
+        return tag instanceof ByteTag ? ((ByteTag) tag).asByte() : def;
+    }
+
+    /**
+     * Returns the value of the float tag if the tag exists and is a FloatTag, or {@code 0F}.
+     * Unlike {@link #getFloat(String)}, this does not get the float value from other number tags.
+     *
+     * @param tagName tag name
+     * @return float if present, or {@code 0F}
+     * @see #getFloat(String)
+     */
+    public float getFloatStrict(String tagName) {
+        return this.getFloatStrict(tagName, 0.0F);
+    }
+
+    /**
+     * Returns the value of the float tag if the tag exists and is a FloatTag, or {@code def}.
+     * Unlike {@link #getFloat(String, float)}, this does not get the float value from other number tags.
+     *
+     * @param tagName tag name
+     * @return float if present, or {@code def}
+     * @see #getFloat(String, float)
+     */
+    public float getFloatStrict(String tagName, float def) {
+        final Tag tag = this.value.get(tagName);
+        return tag instanceof FloatTag ? ((FloatTag) tag).asFloat() : def;
+    }
+
+    /**
+     * Returns the value of the double tag if the tag exists and is a DoubleTag, or {@code 0D}.
+     * Unlike {@link #getDouble(String)}, this does not get the double value from other number tags.
+     *
+     * @param tagName tag name
+     * @return double if present, or {@code 0D}
+     * @see #getDouble(String)
+     */
+    public double getDoubleStrict(String tagName) {
+        return this.getDoubleStrict(tagName, 0.0D);
+    }
+
+    /**
+     * Returns the value of the double tag if the tag exists and is a DoubleTag, or {@code def}.
+     * Unlike {@link #getDouble(String, double)}, this does not get the double value from other number tags.
+     *
+     * @param tagName tag name
+     * @return double if present, or {@code def}
+     * @see #getDouble(String, double)
+     */
+    public double getDoubleStrict(String tagName, double def) {
+        final Tag tag = this.value.get(tagName);
+        return tag instanceof DoubleTag ? ((DoubleTag) tag).asDouble() : def;
     }
 
     /**
