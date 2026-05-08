@@ -2,6 +2,9 @@ package com.viaversion.nbt.limiter;
 
 public interface TagLimiter {
 
+    int DEFAULT_MAX_BYTES = 2097152; // 2mb
+    int DEFAULT_MAX_NESTING_LEVEL = 512;
+
     /**
      * Returns a new tag limiter with the given max bytes and nesting levels.
      *
