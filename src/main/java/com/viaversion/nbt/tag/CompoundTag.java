@@ -7,6 +7,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -19,13 +20,14 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class CompoundTag implements Tag, Iterable<Entry<String, Tag>> {
     public static final int ID = 10;
+    private static final Map<String, Tag> EMPTY = Collections.emptyMap();
     private Map<String, Tag> value;
 
     /**
-     * Creates a tag.
+     * Creates a tag. Its backing map is only created once the tag is written to.
      */
     public CompoundTag() {
-        this(new LinkedHashMap<>(8));
+        this.value = EMPTY;
     }
 
     /**
@@ -52,6 +54,7 @@ public final class CompoundTag implements Tag, Iterable<Entry<String, Tag>> {
         int id;
 
         CompoundTag compoundTag = new CompoundTag();
+        Map<String, Tag> value = null;
         while (true) {
             tagLimiter.countByte();
             id = in.readByte();
@@ -68,14 +71,29 @@ public final class CompoundTag implements Tag, Iterable<Entry<String, Tag>> {
             } catch (IllegalArgumentException e) {
                 throw new IOException("Failed to create tag.", e);
             }
-            compoundTag.value.put(name, tag);
+            if (value == null) {
+                value = compoundTag.valueOrCreate();
+            }
+            value.put(name, tag);
         }
         return compoundTag;
     }
 
+    /**
+     * Returns the backing map, creating it if this tag was created empty.
+     *
+     * @return The backing map.
+     */
+    private Map<String, Tag> valueOrCreate() {
+        if (this.value == EMPTY) {
+            this.value = new LinkedHashMap<>(8);
+        }
+        return this.value;
+    }
+
     @Override
     public Map<String, Tag> getValue() {
-        return this.value;
+        return this.valueOrCreate();
     }
 
     @Override
@@ -98,9 +116,11 @@ public final class CompoundTag implements Tag, Iterable<Entry<String, Tag>> {
      * @param value New value of this tag.
      */
     public void setValue(LinkedHashMap<String, Tag> value) {
-        for (Entry<String, Tag> entry : value.entrySet()) {
-            if (entry.getKey() == null || entry.getValue() == null) {
-                throw new IllegalArgumentException("key and value cannot be null");
+        if (!value.isEmpty()) {
+            for (Entry<String, Tag> entry : value.entrySet()) {
+                if (entry.getKey() == null || entry.getValue() == null) {
+                    throw new IllegalArgumentException("key and value cannot be null");
+                }
             }
         }
         this.value = value;
@@ -478,43 +498,46 @@ public final class CompoundTag implements Tag, Iterable<Entry<String, Tag>> {
         if (tag == this) {
             throw new IllegalArgumentException("Cannot add a tag to itself");
         }
-        return this.value.put(tagName, tag);
+        return this.valueOrCreate().put(tagName, tag);
     }
 
     public void putString(String tagName, String value) {
-        this.value.put(tagName, new StringTag(value));
+        this.valueOrCreate().put(tagName, new StringTag(value));
     }
 
     public void putByte(String tagName, byte value) {
-        this.value.put(tagName, new ByteTag(value));
+        this.valueOrCreate().put(tagName, new ByteTag(value));
     }
 
     public void putInt(String tagName, int value) {
-        this.value.put(tagName, new IntTag(value));
+        this.valueOrCreate().put(tagName, new IntTag(value));
     }
 
     public void putShort(String tagName, short value) {
-        this.value.put(tagName, new ShortTag(value));
+        this.valueOrCreate().put(tagName, new ShortTag(value));
     }
 
     public void putLong(String tagName, long value) {
-        this.value.put(tagName, new LongTag(value));
+        this.valueOrCreate().put(tagName, new LongTag(value));
     }
 
     public void putFloat(String tagName, float value) {
-        this.value.put(tagName, new FloatTag(value));
+        this.valueOrCreate().put(tagName, new FloatTag(value));
     }
 
     public void putDouble(String tagName, double value) {
-        this.value.put(tagName, new DoubleTag(value));
+        this.valueOrCreate().put(tagName, new DoubleTag(value));
     }
 
     public void putBoolean(String tagName, boolean value) {
-        this.value.put(tagName, new ByteTag((byte) (value ? 1 : 0)));
+        this.valueOrCreate().put(tagName, new ByteTag((byte) (value ? 1 : 0)));
     }
 
     public void putAll(CompoundTag compoundTag) {
-        this.value.putAll(compoundTag.value);
+        if (compoundTag.value.isEmpty()) {
+            return;
+        }
+        this.valueOrCreate().putAll(compoundTag.value);
     }
 
     /**
@@ -528,7 +551,7 @@ public final class CompoundTag implements Tag, Iterable<Entry<String, Tag>> {
      */
     @Nullable
     public Tag remove(String tagName) {
-        return this.value.remove(tagName);
+        return this.value == EMPTY ? null : this.value.remove(tagName);
     }
 
     /**
@@ -541,7 +564,7 @@ public final class CompoundTag implements Tag, Iterable<Entry<String, Tag>> {
     @Nullable
     public <T extends Tag> T removeUnchecked(String tagName) {
         //noinspection unchecked
-        return (T) this.value.remove(tagName);
+        return this.value == EMPTY ? null : (T) this.value.remove(tagName);
     }
 
     /**
@@ -584,7 +607,9 @@ public final class CompoundTag implements Tag, Iterable<Entry<String, Tag>> {
      * Clears all tags from this compound tag.
      */
     public void clear() {
-        this.value.clear();
+        if (this.value != EMPTY) {
+            this.value.clear();
+        }
     }
 
     @Override
@@ -619,6 +644,10 @@ public final class CompoundTag implements Tag, Iterable<Entry<String, Tag>> {
 
     @Override
     public CompoundTag copy() {
+        if (this.value.isEmpty()) {
+            return new CompoundTag();
+        }
+
         LinkedHashMap<String, Tag> newMap = new LinkedHashMap<>(this.value.size());
         for (Entry<String, Tag> entry : this.value.entrySet()) {
             newMap.put(entry.getKey(), entry.getValue().copy());
